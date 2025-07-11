@@ -169,7 +169,7 @@ function setupWebSocketListeners() {
 async function loadInitialData() {
   try {
     console.log('Chargement des données depuis le backend...');
-    const response = await fetch('/api/cells');
+    const response = await fetch('./api/cells');
     if (!response.ok) throw new Error('Erreur réseau');
 
     const cells = await response.json();
@@ -212,8 +212,8 @@ function loadAdditionalLayers() {
 function loadLocalGeoJSON() {
   console.log('Chargement des données locales...');
   vectorSource.clear();
-  map.addLayer(loadGeoJsonLayer('geojson/Boulison_Cells.geojson', getBaseCellStyle));
-  map.addLayer(loadGeoJsonLayer('geojson/Boulison_Rivers.geojson', getRiverStyle));
+  map.addLayer(loadGeoJsonLayer('./geojson/Boulison_Cells.geojson', getBaseCellStyle));
+  map.addLayer(loadGeoJsonLayer('./geojson/Boulison_Rivers.geojson', getRiverStyle));
 }
 
 // Récupération des informations d'une cellule
@@ -255,10 +255,6 @@ function updateInfoPopup(info) {
   document.getElementById('changeBiomeBtn').addEventListener('click', () => {
     changeBiome(cellId, selectedFeature);
   });
-
-  document.getElementById('buildStructureBtn').addEventListener('click', () => {
-    buildStructure(cellId, selectedFeature);
-  });
 }
 
 // Changement de biome
@@ -283,34 +279,6 @@ async function changeBiome(cellId, feature) {
   } catch (error) {
     console.error('Erreur:', error);
     alert("Erreur lors de la mise à jour du biome");
-  }
-}
-
-// Construction d'une structure
-async function buildStructure(cellId, feature) {
-  const currentType = feature.get('type') || 'land';
-  const structureTypes = ['land', 'village', 'city', 'fortress', 'farm', 'mine'];
-  const currentIndex = structureTypes.indexOf(currentType);
-  const newType = structureTypes[(currentIndex + 1) % structureTypes.length];
-
-  try {
-    const response = await fetch(`http://localhost:5000/api/cells/${cellId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        type: newType,
-        info: `Structure: ${newType}`
-      })
-    });
-
-    if (!response.ok) throw new Error('Erreur lors de la construction');
-
-    console.log('Structure construite avec succès');
-  } catch (error) {
-    console.error('Erreur:', error);
-    alert("Erreur lors de la construction");
   }
 }
 
