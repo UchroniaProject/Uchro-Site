@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'nonce-{{nonce}}' 'sha256-edb6808911bebcb324b2df57e5c9935149e56984ff083b74c6cfe215f5b710ba' https://cdn.jsdelivr.net">
+  <title>Uchronia - Carte interactive</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/node_modules/ol/ol.css"> 
+  
+</head>
+<body>
+  <div id="map"></div>
+
+  <script nonce="{{nonce}}" src="/node_modules/ol/dist/ol.js"></script>
+  <script nonce="{{nonce}}" src="/node_modules/socket.io-client/dist/socket.io.min.js"></script>
+  <script nonce="{{nonce}}" src="script.js"></script>
+</body>
+</html>
