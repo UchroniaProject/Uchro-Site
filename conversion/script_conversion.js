@@ -56,6 +56,7 @@ function formatGeoJSON(geojson) {
     // Convertir chaque feature en chaîne de caractères avec le même formatage que le fichier d'entrée
     let featuresString = '';
     geojson.features.forEach((feature, index) => {
+        // L'usage du .stringify n'est pas parfait, les espaces entre clé et valeur disparaissent, mais c'est mieux que rien.
         const featureString = JSON.stringify(feature, null);
         featuresString += featureString;
         if (index < geojson.features.length - 1) {
@@ -65,9 +66,9 @@ function formatGeoJSON(geojson) {
 
     // Construire la chaîne de caractères finale
     const header = `{
-  "type": "FeatureCollection",
-  "name": "${geojson.name}",
-  "features": [
+"type": "FeatureCollection",
+"name": "${geojson.name}",
+"features": [
 `;
     const footer = `
   ]
