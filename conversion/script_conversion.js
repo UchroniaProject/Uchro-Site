@@ -32,7 +32,7 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
             }
 
             // Convertir le GeoJSON en chaîne de caractères
-            const convertedGeojson = JSON.stringify(geojson, null);
+            const convertedGeojson = JSON.stringify(geojson, null, 1);
 
             // Proposer un téléchargement
             const blob = new Blob([convertedGeojson], { type: 'application/json' });
