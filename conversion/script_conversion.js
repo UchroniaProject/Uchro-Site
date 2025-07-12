@@ -31,8 +31,8 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
                 return;
             }
 
-            // Convertir le GeoJSON en chaîne de caractères
-            const convertedGeojson = JSON.stringify(geojson, null, 1);
+            // Convertir le GeoJSON en chaîne de caractères avec le même formatage que le fichier d'entrée
+            const convertedGeojson = formatGeoJSON(geojson);
 
             // Proposer un téléchargement
             const blob = new Blob([convertedGeojson], { type: 'application/json' });
@@ -51,3 +51,27 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
 
     reader.readAsText(file);
 });
+
+function formatGeoJSON(geojson) {
+    // Convertir chaque feature en chaîne de caractères avec le même formatage que le fichier d'entrée
+    let featuresString = '';
+    geojson.features.forEach((feature, index) => {
+        const featureString = JSON.stringify(feature, null);
+        featuresString += featureString;
+        if (index < geojson.features.length - 1) {
+            featuresString += ',';
+        }
+    });
+
+    // Construire la chaîne de caractères finale
+    const header = `{
+  "type": "FeatureCollection",
+  "name": "${geojson.name}",
+  "features": [
+`;
+    const footer = `
+  ]
+}
+`;
+    return header + featuresString + footer;
+}
