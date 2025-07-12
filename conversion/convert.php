@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 $upload_dir = "uploads/";
 $converted_dir = "converted/";
 $filename = $_GET['filename'];
