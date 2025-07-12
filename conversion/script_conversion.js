@@ -31,11 +31,22 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
                 return;
             }
 
-            // Convertir le GeoJSON en chaîne de caractères
-            const convertedGeojson = JSON.stringify(geojson, null, 2);
+            // Convertir le GeoJSON en chaîne de caractères avec une feature par ligne
+            const geojsonCopy = JSON.parse(JSON.stringify(geojson));
+            const features = geojsonCopy.features;
+            geojsonCopy.features = [];
+            let convertedGeojson = JSON.stringify(geojsonCopy, null, 2);
+            convertedGeojson = convertedGeojson.replace('[]', '[');
 
-            // Afficher le résultat
-            document.getElementById('result').innerHTML = '<h2>Fichier converti :</h2><pre>' + convertedGeojson + '</pre>';
+            features.forEach((feature, index) => {
+                const featureString = JSON.stringify(feature, null, 2);
+                convertedGeojson += featureString;
+                if (index < features.length - 1) {
+                    convertedGeojson += ',';
+                }
+            });
+
+            convertedGeojson += '\n]';
 
             // Proposer un téléchargement
             const blob = new Blob([convertedGeojson], { type: 'application/json' });
