@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversion GeoJSON</title>
+</head>
+<body>
+    <h1>Conversion GeoJSON</h1>
+    <form id="uploadForm">
+        <label for="file">Sélectionnez un fichier GeoJSON :</label>
+        <input type="file" name="file" id="file" accept=".geojson">
+        <button type="submit">Télécharger et convertir</button>
+    </form>
+    <div id="result"></div>
+
+    <script src="https://unpkg.com/geojsonhint@latest/geojsonhint.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
