@@ -59,7 +59,7 @@ function formatGeoJSON(geojson) {
         const featureString = JSON.stringify(feature, null);
         featuresString += featureString;
         if (index < geojson.features.length - 1) {
-            featuresString += ',';
+            featuresString += ',\n';
         }
     });
 
