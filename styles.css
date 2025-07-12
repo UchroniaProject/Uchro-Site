@@ -3,42 +3,42 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
-  
-  body {
+}
+
+body {
     font-family: 'Segoe UI', Roboto, sans-serif;
     background-color: #0f0f0f;
     color: #f5f5f5;
     line-height: 1.6;
-  }
-  
-  .container {
+}
+
+.container {
     max-width: 960px;
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
-  }
-  
-  /* Header */
-  header {
+}
+
+/* Header */
+header {
     background: linear-gradient(to right, #1e1e1e, #2a2a2a);
     padding: 4rem 2rem;
-  }
-  
-  h1 {
+}
+
+h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
     color: #00aaff;
-  }
-  
-  .tagline {
+}
+
+.tagline {
     font-size: 1.25rem;
     margin-bottom: 2rem;
     color: #cccccc;
-  }
-  
-  /* Button */
-  .discord-button {
+}
+
+/* Button */
+.discord-button {
     display: inline-block;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
@@ -47,49 +47,115 @@
     text-decoration: none;
     border-radius: 8px;
     transition: background-color 0.3s ease;
-  }
-  
-  .discord-button:hover {
+}
+
+.discord-button:hover {
     background-color: #4752c4;
-  }
-  
-  /* Section */
-  .about {
+}
+
+/* Form */
+form {
+    background-color: #2a2a2a;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    color: #00aaff;
+}
+
+input[type="file"] {
+    display: block;
+    margin: 0 auto 1rem;
+    padding: 0.5rem;
+    background-color: #1a1a1a;
+    color: #f5f5f5;
+    border: 1px solid #00aaff;
+    border-radius: 4px;
+}
+
+button[type="submit"] {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #00aaff;
+    color: #ffffff;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0088cc;
+}
+
+/* Section */
+.about {
     background-color: #1a1a1a;
     padding: 4rem 2rem;
-  }
-  
-  .about h2 {
+}
+
+.about h2 {
     font-size: 2rem;
     margin-bottom: 1rem;
     color: #00aaff;
-  }
-  
-  /* Footer */
-  footer {
+}
+
+/* Result */
+#result {
+    background-color: #2a2a2a;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+    text-align: left;
+}
+
+/* Checkbox */
+.checkbox-container {
+    margin-bottom: 1rem;
+}
+
+.checkbox-container label {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #f5f5f5;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+/* Footer */
+footer {
     background-color: #111;
     padding: 2rem 1rem;
     font-size: 0.9rem;
     color: #777;
-  }
-  
-  .logo {
+}
+
+.logo {
     width: 100px;
     height: auto;
     margin-bottom: 1rem;
     transition: transform 0.4s ease, filter 0.4s ease;
     filter: drop-shadow(0 0 4px #00aaff66);
-  }
+}
 
-  .logo-link {
+.logo-link {
     display: inline-block;
     margin-bottom: 1rem;
     text-decoration: none;
-  }
-  
-  
-  .logo:hover {
+}
+
+.logo:hover {
     transform: rotate(5deg) scale(1.05);
     filter: drop-shadow(0 0 8px #00aaff);
-  }
-  
+}
