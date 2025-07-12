@@ -21,8 +21,11 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
                 feature.properties.info = `Informations de la cellule ${feature.properties.id}`;
             });
 
-            // Valider le GeoJSON
-            const hints = geojsonhint.hint(geojson);
+            // Valider le GeoJSON et ignorer les avertissements de la règle de la main droite
+            const hints = geojsonhint.hint(geojson).filter(hint => {
+                return hint.message !== "Polygons and MultiPolygons should follow the right-hand rule";
+            });
+
             if (hints.length > 0) {
                 document.getElementById('result').innerHTML = 'Erreurs de validation GeoJSON : ' + JSON.stringify(hints);
                 return;
