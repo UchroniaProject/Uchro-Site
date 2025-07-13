@@ -23,6 +23,8 @@
             <form id="uploadForm">
                 <label for="file">Sélectionnez un fichier GeoJSON :</label>
                 <input type="file" name="file" id="file" accept=".geojson">
+                <label for="mapName">Nom de la carte (max 32 caractères, sans espace) :</label>
+                <input type="text" name="mapName" id="mapName" required pattern="[a-zA-Z0-9_]{1,32}" title="Nom de la carte (max 32 caractères, sans espace)">
                 <button type="submit">Télécharger et convertir</button>
             </form>
             <div id="result"></div>

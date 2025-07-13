@@ -3,9 +3,22 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
 
     const fileInput = document.getElementById('file');
     const file = fileInput.files[0];
+    const mapNameInput = document.getElementById('mapName');
+    const mapName = mapNameInput.value.trim().replace(/\s+/g, '_');
+    
 
     if (!file) {
         document.getElementById('result').innerHTML = 'Veuillez sélectionner un fichier.';
+        return;
+    }
+
+    if (!mapName) {
+        document.getElementById('result').innerHTML = 'Veuillez entrer un nom pour la carte.';
+        return;
+    }
+
+    if (!/^[a-zA-Z0-9_]{1,32}$/.test(mapName)) {
+        document.getElementById('result').innerHTML = 'Le nom de la carte ne doit contenir que des lettres, des chiffres et des underscores, sans espace, et faire moins de 32 caractères.';
         return;
     }
 
@@ -83,11 +96,6 @@ function processGeoJSON(geojson) {
         }
     });
 
-    // Ajouter une paire clé-valeur à chaque feature
-    geojson.features.forEach(feature => {
-        feature.properties.info = `Informations de la cellule ${feature.properties.id}`;
-    });
-
     // Valider le GeoJSON et ignorer les avertissements de la règle de la main droite
     const hints = geojsonhint.hint(geojson).filter(hint => {
         return hint.message !== "Polygons and MultiPolygons should follow the right-hand rule";
@@ -106,7 +114,7 @@ function processGeoJSON(geojson) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'converted_' + file.name;
+    a.download = 'converted_' + mapName + '.geojson';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -128,7 +136,7 @@ function formatGeoJSON(geojson) {
     // Construire la chaîne de caractères finale
     const header = `{
   "type": "FeatureCollection",
-  "name": "${geojson.name}",
+  "name": "${mapName}",
   "features": [
 `;
     const footer = `
