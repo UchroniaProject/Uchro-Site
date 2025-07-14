@@ -4,7 +4,7 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
     const fileInput = document.getElementById('file');
     const file = fileInput.files[0];
     const mapNameInput = document.getElementById('mapName');
-    const mapName = mapNameInput.value.trim().replace(/\s+/g, '_');
+    const mapName = mapNameInput.value.trim().replaceAll(' ', '_');
     
 
     if (!file) {
@@ -144,4 +144,6 @@ function formatGeoJSON(geojson) {
 }
 `;
     return header + featuresString + footer;
+    // Pour "annuler" le formatage et réduire la taille du .geojson, sélectionner la méthode en dessous
+    //return JSON.stringify(geojson)
 }
