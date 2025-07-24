@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parties en cours - Uchronia</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./style_parties.css">
+</head>
+<body>
+    <header>
+    <div class="container">
+        <a href="/" class="logo-link">
+            <img src="src/images/Logo-V4.png" alt="Logo d'Uchronia" class="logo" />
+        </a>
+    </div>
+    </header>
+
+    <section class="about">
+        <div class="container">
+            <h1>Parties en cours</h1>
+            <div id="gameList" class="game-list"></div>
+            <button id="newGameButton" class="floating-button">+</button>
+        </div>
+    </section>
+
+    <!-- Popup pour la création de nouvelle partie -->
+    <div id="newGamePopup" class="popup-overlay">
+        <div class="popup-content">
+            <h2>Créer une nouvelle partie</h2>
+            <form id="newGameForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="gameName">Nom de la partie :</label>
+                    <input type="text" id="gameName" name="gameName" required>
+                </div>
+                <div class="form-group">
+                    <label for="mapFile">Fichier de carte (.map) :</label>
+                    <input type="file" id="mapFile" name="mapFile" accept=".map" required>
+                </div>
+                <div class="popup-buttons">
+                    <button type="button" id="cancelGameCreation" class="button secondary">Annuler</button>
+                    <button type="submit" class="button primary">Créer la partie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="./scripts/script_parties.js"></script>
+</body>
+</html>
