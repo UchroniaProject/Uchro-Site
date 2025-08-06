@@ -1,0 +1,11 @@
+#Ignore the venv folder
+Django/
+
+#Ignore databases
+*.db
+*sqlite3
+
+#Ignore some configuration files
+*manage.py
+__pycache__/
+*.env
