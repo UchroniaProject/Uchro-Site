@@ -3,9 +3,8 @@ Django/
 
 #Ignore databases
 *.db
-*sqlite3
+*.sqlite3
 
 #Ignore some configuration files
-*manage.py
 __pycache__/
 *.env
