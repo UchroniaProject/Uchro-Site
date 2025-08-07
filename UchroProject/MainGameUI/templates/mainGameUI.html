@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte OpenLayers avec GeoJSON</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol/ol.css">
+    <script src="https://cdn.jsdelivr.net/npm/ol/dist/ol.js"></script>
+    <link rel="stylesheet" href="{% static 'css/mainGameUi_style.css' %}">
+</head>
+<body>
+    <div class="top-bar"></div>
+    <div id="map" class="map"></div>
+    <script>
+        var map = new ol.Map({
+            target: 'map',
+            layers: [],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([2.3522, 48.8566]),
+                zoom: 12
+            })
+        });
+
+        var vectorLayer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                url: "{% static 'geojson/map.geojson' %}",
+                format: new ol.format.GeoJSON()
+            })
+        });
+
+        map.addLayer(vectorLayer);
+    </script>
+</body>
+<!-- layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                })
+            ], -->
+</html>
