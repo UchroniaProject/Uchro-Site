@@ -8,3 +8,4 @@ Django/
 #Ignore some configuration files
 __pycache__/
 *.env
+UchroProject.code-workspace
