@@ -63,12 +63,12 @@
             } else if (cellType === 'island') {
                 return new ol.style.Style({
                     fill: new ol.style.Fill({ color: 'rgba(127, 180, 101, 1)' }),
-                    stroke: new ol.style.Stroke({ color: 'gray', width: 2 })
+                    stroke: new ol.style.Stroke({ color: 'gray', width: 0.75 })
                 });
             } else if (cellType === 'lake') {
                 return new ol.style.Style({
                     fill: new ol.style.Fill({ color: 'rgba(125, 174, 222, 1)' }),
-                    stroke: new ol.style.Stroke({ color: 'gray', width: 2 })
+                    stroke: new ol.style.Stroke({ color: 'gray', width: 0.75 })
                 });
             }
             // Style par défaut
