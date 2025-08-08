@@ -18,18 +18,78 @@
             layers: [],
             view: new ol.View({
                 center: ol.proj.fromLonLat([2.3522, 48.8566]),
-                zoom: 12
+                zoom: 5
             })
         });
+
+        // Fonction pour changer le CRS
+        function changeCRS(newCRSCode) {
+            try {
+                var newCRS = ol.proj.get(newCRSCode);
+                if (!newCRS) {
+                    console.error('Le CRS spécifié n\'est pas valide ou n\'est pas supporté.');
+                    return;
+                }
+
+                var view = map.getView();
+                var currentCenter = view.getCenter();
+                var currentZoom = view.getZoom();
+
+                // Convertir le centre actuel au nouveau CRS
+                var newCenter = ol.proj.transform(currentCenter, view.getProjection(), newCRS);
+
+                // Créer une nouvelle vue avec le nouveau CRS et le centre transformé
+                var newView = new ol.View({
+                    center: newCenter,
+                    zoom: currentZoom,
+                    projection: newCRS
+                });
+
+                // Appliquer la nouvelle vue à la carte
+                map.setView(newView);
+            } catch (e) {
+                console.error('Erreur lors du changement de CRS :', e);
+            }
+        }
+        
+        // Fonction de style selon le type
+        function cellStyle(feature) {
+            var cellType = feature.get('type'); // Assure-toi que 'type' existe dans ton GeoJSON
+            if (cellType === 'ocean') {
+                return new ol.style.Style({
+                    fill: new ol.style.Fill({ color: 'rgba(37, 112, 188, 1)' }),
+                    stroke: new ol.style.Stroke({ color: 'gray', width: 0.25 })
+                });
+            } else if (cellType === 'island') {
+                return new ol.style.Style({
+                    fill: new ol.style.Fill({ color: 'rgba(127, 180, 101, 1)' }),
+                    stroke: new ol.style.Stroke({ color: 'gray', width: 2 })
+                });
+            } else if (cellType === 'lake') {
+                return new ol.style.Style({
+                    fill: new ol.style.Fill({ color: 'rgba(125, 174, 222, 1)' }),
+                    stroke: new ol.style.Stroke({ color: 'gray', width: 2 })
+                });
+            }
+            // Style par défaut
+            return new ol.style.Style({
+                fill: new ol.style.Fill({ color: 'rgba(128, 128, 128, 0.5)' }),
+                stroke: new ol.style.Stroke({ color: 'gray', width: 1 })
+            });
+        }
 
         var vectorLayer = new ol.layer.Vector({
             source: new ol.source.Vector({
-                url: "{% static 'geojson/map.geojson' %}",
+                url: "{% static 'geojson/cells.geojson' %}",
                 format: new ol.format.GeoJSON()
-            })
+            }),
+            style: cellStyle
         });
 
         map.addLayer(vectorLayer);
+
+        // Exemple d'utilisation : changer le CRS pour 'EPSG:4326'
+        changeCRS('EPSG:4326');
     </script>
 </body>
 <!-- layers: [
