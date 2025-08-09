@@ -20,4 +20,5 @@ body, html {
     height: 93vh; /* 95% de la hauteur de l'écran */
     position: fixed;
     top: 7vh; /* Positionné juste en dessous de la barre bleue */
+    background: rgba(39, 172, 210, 1);
 }

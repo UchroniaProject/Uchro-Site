@@ -57,28 +57,34 @@
             var cellType = feature.get('type'); // Assure-toi que 'type' existe dans ton GeoJSON
             if (cellType === 'ocean') {
                 return new ol.style.Style({
-                    fill: new ol.style.Fill({ color: 'rgba(37, 112, 188, 1)' }),
-                    stroke: new ol.style.Stroke({ color: 'gray', width: 0.25 })
+                    fill: new ol.style.Fill({ color: 'rgba(39, 172, 210, 1)' })
                 });
             } else if (cellType === 'island') {
                 return new ol.style.Style({
                     fill: new ol.style.Fill({ color: 'rgba(127, 180, 101, 1)' }),
-                    stroke: new ol.style.Stroke({ color: 'gray', width: 0.75 })
+                    stroke: new ol.style.Stroke({ color: 'grey', width: 1 })
                 });
             } else if (cellType === 'lake') {
                 return new ol.style.Style({
                     fill: new ol.style.Fill({ color: 'rgba(125, 174, 222, 1)' }),
-                    stroke: new ol.style.Stroke({ color: 'gray', width: 0.75 })
+                    stroke: new ol.style.Stroke({ color: 'rgba(125, 174, 222, 1)', width: 1 })
                 });
             }
             // Style par défaut
             return new ol.style.Style({
-                fill: new ol.style.Fill({ color: 'rgba(128, 128, 128, 0.5)' }),
-                stroke: new ol.style.Stroke({ color: 'gray', width: 1 })
+                fill: new ol.style.Fill({ color: 'rgba(128, 128, 128, 0.5)' })
             });
         }
 
-        var vectorLayer = new ol.layer.Vector({
+        var continentsLayer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                url: "{% static 'geojson/continents.geojson' %}",
+                format: new ol.format.GeoJSON()
+            }),
+            style: cellStyle
+        });
+
+        var cellsLayer = new ol.layer.Vector({
             source: new ol.source.Vector({
                 url: "{% static 'geojson/cells.geojson' %}",
                 format: new ol.format.GeoJSON()
@@ -86,10 +92,32 @@
             style: cellStyle
         });
 
-        map.addLayer(vectorLayer);
-
-        // Exemple d'utilisation : changer le CRS pour 'EPSG:4326'
         changeCRS('EPSG:4326');
+        var currentLayer = null;
+
+        function updateLayerByZoom() {
+            var zoom = map.getView().getZoom();
+
+            if (zoom < 6) {
+                if (currentLayer !== continentsLayer) {
+                    if (currentLayer) map.removeLayer(currentLayer);
+                    map.addLayer(continentsLayer);
+                    currentLayer = continentsLayer;
+                }
+            } else {
+                if (currentLayer !== cellsLayer) {
+                    if (currentLayer) map.removeLayer(currentLayer);
+                    map.addLayer(cellsLayer);
+                    currentLayer = cellsLayer;
+                }
+            }
+        }
+
+        // Initialisation
+        updateLayerByZoom();
+
+        // Sur chaque fin de mouvement (zoom ou pan)
+        map.on('moveend', updateLayerByZoom);
     </script>
 </body>
 <!-- layers: [
