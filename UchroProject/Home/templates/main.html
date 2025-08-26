@@ -8,19 +8,32 @@
 
 {% block content %}
   <header>
+    
+    <div class="site-header">
+      {% if request.user.is_authenticated %}
+        <button class="auth-icon" type="button" aria-label="Se déconnecter" data-logout>
+          <img src="{% static 'img/logout.svg' %}" width="28" height="28" alt="" aria-hidden="true">
+        </button>
+      {% else %}
+        <button class="auth-icon" type="button" aria-label="Se connecter" data-open-login>
+          <img src="{% static 'img/login.svg' %}" width="28" height="28" alt="" aria-hidden="true">
+        </button>
+      {% endif %}
+      </div>
+
     <div class="container">
         <a href="/" class="logo-link">
             <img src="{% static 'Logo_UchroProject.png' %}" alt="Logo d'Uchronia" class="logo" />
         </a>
       <h1>Uchronia</h1>
       <p class="tagline">Un jeu de gestion, de simulation et de stratégie.</p>
-      <a href="https://discord.gg/UdZ3gcdeCC" class="discord-button" target="_blank" rel="noopener noreferrer">
+      <a href="https://discord.gg/UdZ3gcdeCC" class="main-button" target="_blank" rel="noopener noreferrer">
         Rejoindre le Discord
       </a>
-      <a href="./map" class="discord-button">
+      <a href="./map" class="main-button">
         Accéder à la carte
       </a>
-      <a href="/conversion" class="discord-button" target="_blank" rel="noopener noreferrer">
+      <a href="/conversion" class="main-button" rel="noopener noreferrer">
         Convertisseur GeoJSON
       </a>
     </div>
@@ -35,4 +48,40 @@
     </div>
   </section>
   
+  <!-- Modale de connexion (uniquement visible si non connecté) -->
+  {% if not request.user.is_authenticated %}
+    <div id="login-modal"
+        class="modal"
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="login-title"
+        hidden
+        data-login-api-url="{% url 'login_api' %}"
+        data-logout-api-url="{% url 'logout_api' %}">
+      <div class="modal__backdrop" data-close-login></div>
+      <div class="modal__panel" role="document">
+        <button type="button" class="modal__close" aria-label="Fermer" data-close-login>×</button>
+        <h2 id="login-title">Se connecter</h2>
+
+        <form id="login-form" novalidate>
+          <div class="form-row">
+            <label for="id_username">Pseudonyme</label>
+            <input type="text" name="username" id="id_username" autocomplete="username" required>
+          </div>
+          <div class="form-row">
+            <label for="id_password">Mot de passe</label>
+            <input type="password" name="password" id="id_password" autocomplete="current-password" required>
+          </div>
+          <div class="form-row">
+            <button type="submit" class="main-button">Connexion</button>
+          </div>
+          <div class="form-errors" id="login-errors" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+    <script src="{% static 'scripts/Home_auth.js' %}" defer></script>
+    
 {% endblock %}

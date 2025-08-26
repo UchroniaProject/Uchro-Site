@@ -1,0 +1,19 @@
+/* ====== Base ====== */
+html, body {
+  margin: 0; padding: 0; height: 100%; width: 100%;
+  overflow: hidden;
+}
+
+/* Carte plein écran sous la top-bar */
+.map {
+  position: fixed;
+  top: 7vh; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  background: #27acd2;
+  z-index: 1; /* toujours derrière le HUD */
+}
+
+/* Mobile: un peu plus large et espacée */
+@media (max-width: 768px) {
+  :root { --sidebar-w-expanded: min(72vw, 280px); }
+}

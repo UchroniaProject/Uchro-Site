@@ -2,17 +2,143 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carte OpenLayers avec GeoJSON</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol/ol.css">
-    <script src="https://cdn.jsdelivr.net/npm/ol/dist/ol.js"></script>
-    <link rel="stylesheet" href="{% static 'css/mainGameUi_style.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carte OpenLayers avec GeoJSON</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol/ol.css">
+  <script src="https://cdn.jsdelivr.net/npm/ol/dist/ol.js"></script>
+  <link rel="stylesheet" href="{% static 'css/mainGameUI_main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/mainGameUI_topbar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/mainGameUI_sidebar.css' %}">
 </head>
 <body>
-    <div class="top-bar"></div>
     <div id="map" class="map"></div>
-    <script>
+    <div class="top-bar" role="banner">
+        
+        <!-- Groupe gauche: maison (accueil) + 5 cadres vides -->
+        <div class="topbar__left">
+        <!-- Bouton Accueil -->
+            <a class="topbar__home" href="/" title="Accueil" aria-label="Accueil">
+            <img
+                class="topbar__icon-img"
+                src="{% static 'img/home.png' %}"
+                srcset="{% static 'img/home.png' %} 1x, {% static 'img/home@2x.png' %} 2x"
+                alt="Retour à l'accueil" aria-hidden="true">
+            </a>
+            <div class="topbar__indicators" role="group" aria-label="Indicateurs">
+                <div class="indicator-slot" aria-hidden="true">
+                    <button type="button" class="indicator-select" data-slot="1"
+                         aria-haspopup="listbox" aria-expanded="false"
+                         aria-label="Choisir l’indicateur du slot 1">
+                    </button>
+                </div>
+                <div class="indicator-slot" aria-hidden="true">
+                    <button type="button" class="indicator-select" data-slot="1"
+                         aria-haspopup="listbox" aria-expanded="false"
+                         aria-label="Choisir l’indicateur du slot 2">
+                    </button>
+                </div>
+                <div class="indicator-slot" aria-hidden="true">
+                    <button type="button" class="indicator-select" data-slot="1"
+                         aria-haspopup="listbox" aria-expanded="false"
+                         aria-label="Choisir l’indicateur du slot 3">
+                    </button>
+                </div>
+                <div class="indicator-slot" aria-hidden="true">
+                    <button type="button" class="indicator-select" data-slot="1"
+                         aria-haspopup="listbox" aria-expanded="false"
+                         aria-label="Choisir l’indicateur du slot 4">
+                    </button>
+                </div>
+                <div class="indicator-slot" aria-hidden="true">
+                    <button type="button" class="indicator-select" data-slot="1"
+                         aria-haspopup="listbox" aria-expanded="false"
+                         aria-label="Choisir l’indicateur du slot 5">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne centrale: drapeau + nom -->
+        <div class="topbar__center">
+            <div class="center__flag-name">
+                <img class="center__flag" src="{% static 'img/Directoire.png'%}" alt="Drapeau du pays" width=100% height="40px" aria-hidden="true">
+                <span class="center__name">Le Directoire</span>
+            </div>
+        </div>
+
+        <!-- Colonne droite: couloir extensible + Settings à l’extrême droite -->
+        <div class="topbar__right">
+            <div class="right__even" role="group" aria-label="Date et lecteur">
+                <time class="center__date" datetime="{{ iso_date }}">20/08/2050</time>
+                <span class="center__player-placeholder" aria-label="Lecteur (à venir)"></span>
+            </div>
+            <a id="topbar-settings-btn" class="topbar__home"
+                    aria-haspopup="dialog" aria-controls="settings-dialog" aria-label="Paramètres" title="Paramètres">
+                <img class="topbar__icon-img"
+                    src="{% static 'img/settings.svg' %}"
+                    srcset="{% static 'img/settings.svg' %} 1x, {% static 'img/settings@2x.svg' %} 2x"
+                    alt="Paramètres" aria-hidden="true">
+        </a>
+        </div>
+    </div>
+
+    <!-- Popup Paramètres -->
+    <dialog id="settings-dialog" class="mgui-dialog" aria-labelledby="settings-title">
+            <form method="dialog" class="mgui-dialog__surface">
+                <header class="mgui-dialog__header">
+                <h2 id="settings-title">Paramètres</h2>
+                <button value="close" class="mgui-dialog__close" aria-label="Fermer">×</button>
+                </header>
+                <div class="mgui-dialog__body">
+                    <div class="setting-row">
+                        <div class="setting-row__label">Thème</div>
+                        <button id="theme-button" type="button" class="theme-toggle"
+                                data-theme="auto"
+                                aria-label="Thème: Auto (cliquer pour passer en Sombre)"
+                                aria-describedby="theme-help">
+                            Auto
+                        </button>
+                    </div>
+                </div>
+            </form>
+    </dialog>
+
+    <!-- Barre latérale façon Stellaris -->
+    <nav id="mgui-sidebar" class="mgui-sidebar is-collapsed" aria-label="Barre latérale">
+        <button id="mgui-sidebar-toggle"
+                class="mgui-sidebar__toggle"
+                aria-expanded="false"
+                aria-label="Ouvrir la barre">❯</button>
+
+        <div class="mgui-toolbar">
+            <button class="mgui-tool" data-tool="one" data-label="One" title="One" data-url="{% url 'MainGameUI:panel' 'one' %}"><img class="mgui-tool__icon" src="{% static 'img/one.svg' %}" alt=""></button>
+            <button class="mgui-tool" data-tool="two" data-label="Two" title="Two" data-url="{% url 'MainGameUI:panel' 'two' %}"><img class="mgui-tool__icon" src="{% static 'img/two.svg' %}" alt=""></button>
+            <button class="mgui-tool" data-tool="three" data-label="Three" title="Three" data-url="{% url 'MainGameUI:panel' 'three' %}"><img class="mgui-tool__icon" src="{% static 'img/three.svg' %}" alt=""></button>
+            <!-- Ajoute d’autres boutons ici si besoin -->
+        </div>
+    </nav>
+
+    <!-- Panneau latéral gauche -->
+    <aside id="mgui-panel" class="mgui-panel" role="region" aria-label="Panneau" aria-hidden="true">
+        <header class="mgui-panel__header">
+            <h2 id="mgui-panel-title">Panel</h2>
+            <button type="button" id="mgui-panel-close" class="mgui-panel__close" aria-label="Fermer">×</button>
+        </header>
+        <div id="mgui-panel-body" class="mgui-panel__body"></div>
+    </aside>
+
+    <!-- Menu déroulant réutilisé par tous les slots -->
+    <div id="indicator-dropdown" class="indicator-dropdown" hidden role="group" aria-label="Choisir un modificateur">
+        <div class="indicator-dropdown__search">
+        <input type="search" id="indicator-search" placeholder="Rechercher…" aria-label="Rechercher un modificateur" autocomplete="off">
+        </div>
+        <ul class="indicator-dropdown__list" role="listbox" aria-label="Modificateurs"></ul>
+    </div>
+
+
+  <!-- Script CARTE (conservé inline) -->
+  <script>
         var map = new ol.Map({
             target: 'map',
             layers: [],
@@ -119,10 +245,10 @@
         // Sur chaque fin de mouvement (zoom ou pan)
         map.on('moveend', updateLayerByZoom);
     </script>
+
+  <!-- Script UI (dans static) -->
+  <script defer src="{% static 'scripts/MainGameUI.js' %}"></script>
+  <script defer src="{% static 'scripts/MainGameUI_topbar_modifiers.js' %}"></script>
+  <script defer src="{% static 'scripts/MainGameUI_parameters.js' %}"></script>
 </body>
-<!-- layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.OSM()
-                })
-            ], -->
 </html>

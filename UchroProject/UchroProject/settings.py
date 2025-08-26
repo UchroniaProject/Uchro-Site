@@ -116,6 +116,12 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGIN_URL = 'login_page'          # fallback si on va sur une page protégée
+LOGIN_REDIRECT_URL = 'home'       # où rediriger après login réussi (fallback non-AJAX)
+LOGOUT_REDIRECT_URL = 'home'
+SESSION_COOKIE_SECURE = True      # HTTPS (conseillé en prod)
+CSRF_COOKIE_SECURE = True         # idem
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
