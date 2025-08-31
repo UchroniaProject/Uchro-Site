@@ -71,24 +71,24 @@
   }
 
     function closePanel() {
-    const panel = document.querySelector('.mgui-panel');
-    if (!panel) return;
+      const panel = document.querySelector('.mgui-panel');
+      if (!panel) return;
 
-    // Fermer sans animation
-    panel.style.transition = 'none';
-    panel.classList.remove('is-open');     // bascule à l'état "fermé" => règle CSS :not(.is-open)
-    panel.setAttribute('aria-hidden', 'true');
+      // Fermer sans animation
+      panel.style.transition = 'none';
+      panel.classList.remove('is-open');     // bascule à l'état "fermé" => règle CSS :not(.is-open)
+      panel.setAttribute('aria-hidden', 'true');
 
-    // Important: ne PAS laisser d'inline qui persiste (pas de pointer-events en inline)
-    panel.style.removeProperty('pointer-events');
-    panel.style.removeProperty('transform');
-    panel.style.removeProperty('opacity');
+      // Important: ne PAS laisser d'inline qui persiste (pas de pointer-events en inline)
+      panel.style.removeProperty('pointer-events');
+      panel.style.removeProperty('transform');
+      panel.style.removeProperty('opacity');
 
-    void panel.offsetWidth;
-    panel.style.removeProperty('transition');
+      void panel.offsetWidth;
+      panel.style.removeProperty('transition');
 
-    const panelBody = panel.querySelector('.mgui-panel__body');
-    if (panelBody) panelBody.innerHTML = '';
+      const panelBody = panel.querySelector('.mgui-panel__body');
+      if (panelBody) panelBody.innerHTML = '';
     }
 
 

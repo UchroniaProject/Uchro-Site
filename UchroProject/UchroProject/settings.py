@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Home',
-    'MainGameUI'
+    'MainGameUI',
+    'GameModules'
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,37 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+### CHARGEMENT DES MODULES ###
+MODULES_DIR = BASE_DIR / "modules"
+
+# Optionnel: limiter aux modules explicitement activés
+MODULES_ENABLED = None
+#os.getenv("MODULES_ENABLED", "").split(",") if os.getenv("MODULES_ENABLED") else None
+
+def list_modules():
+    if not MODULES_DIR.exists():
+        return []
+    slugs = [d.name for d in MODULES_DIR.iterdir() if d.is_dir()]
+    return [s for s in slugs if (MODULES_DIR / s / "manifest.py").exists()
+            and (MODULES_ENABLED is None or s in MODULES_ENABLED)]
+
+DISCOVERED_MODULES = list_modules()
+
+# Templates: on ajoute le répertoire templates de chaque module
+TEMPLATES[0]["DIRS"] += [MODULES_DIR / slug / "templates" for slug in DISCOVERED_MODULES]
+
+# Statics: on ajoute le répertoire static de chaque module
+STATICFILES_DIRS += [MODULES_DIR / slug / "static" for slug in DISCOVERED_MODULES]
+
+# Contexte global: manifest résolu en URLs statiques
+TEMPLATES[0]["OPTIONS"]["context_processors"] += [
+    "GameModules.context_processors.modules_manifest",
+]
+
+# Expose à l’app cœur
+GAME_MODULES_SETTINGS = {
+    "DIR": MODULES_DIR,
+    "SLUGS": DISCOVERED_MODULES,
+}
