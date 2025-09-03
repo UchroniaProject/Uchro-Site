@@ -22,5 +22,6 @@ urlpatterns = [
     path('', include('MainGameUI.urls')),
     path('admin/', admin.site.urls),
     path("MainGameUI/", include(("MainGameUI.urls", "MainGameUI"), namespace="ui")),
-    path("Game_Modules/", include("Game_Modules.urls", namespace="game_modules")),
 ]
+
+#path("Game_Modules/", include("Game_Modules.urls", namespace="game_modules"))
