@@ -1,0 +1,200 @@
+/* ====== Variables UI ====== */
+:root {
+  color-scheme: light dark;
+
+  /* Couleurs génériques (dark par défaut) */
+  --fg: #e5e7eb;
+  --fg-muted: #cfe8ff;
+  --link: #38bdf8;
+  --hover-overlay: #ffffff18;
+
+  --hud-gap: 12px;
+  --hud-top: 7vh;
+
+  /* Sidebar widths */
+  --sidebar-w-collapsed: 50px;      /* icône + padding */
+  --sidebar-w-expanded: 200px;      /* icône + libellé */
+  /* largeur effective, héritée par tout le document */
+  --sidebar-w: var(--sidebar-w-collapsed);
+
+  --sidebar-bg: #0e1a20cc;
+  --sidebar-stroke: #ffffff1a;
+
+  /* Boutons */
+  --btn-size: 28px;
+  --btn-bg: #1e2233;
+  --btn-bg-hover: #2a3150;
+  --btn-stroke: #ffffff1f;
+  --focus: #80bfff;
+
+  /* Panel */
+  --panel-width: clamp(320px, 50vw, 1000px);
+  --panel-bg: #121726f2;
+  --panel-border: 1px solid #ffffff26;
+  --panel-radius: 10px;
+  --panel-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* Variante claire */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --fg: #0f172a;
+  --fg-muted: #475569;
+  --hover-overlay: #0000000f;
+
+  /* Sidebar */
+  --sidebar-bg: #c9e1fd;          /* fond clair translucide */
+  --sidebar-stroke: #0f172a1a;
+
+  /* Boutons */
+  --btn-bg: #eef2f7;
+  --btn-bg-hover: #e5ebf6;
+  --btn-stroke: #0f172a1a;
+
+  /* Panel */
+  --panel-bg: #d3e7fd;
+  --panel-border: 1px solid #0f172a1a;
+}
+
+
+/* Quand la barre est dépliée, propage la nouvelle largeur partout */
+:root:has(.mgui-sidebar.is-expanded) {
+  --sidebar-w: var(--sidebar-w-expanded);
+}
+
+/* ====== Barre latérale (repliable) ====== */
+.mgui-sidebar {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + var(--hud-top));
+  left: env(safe-area-inset-left, 0px);
+  bottom: 0;
+  width: var(--sidebar-w);
+  padding: var(--hud-gap) 8px var(--hud-gap) var(--hud-gap);
+  box-sizing: border-box;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-stroke);
+  z-index: 1000;
+  transition: width .22s ease;
+}
+
+/* Bouton toggle en tête */
+.mgui-sidebar__toggle {
+  width: 28px; height: 28px;
+  border-radius: 6px; border: 1px solid var(--btn-stroke);
+  background: var(--btn-bg); color: var(--fg); cursor: pointer;
+  display: grid; place-items: center; margin-bottom: 8px;
+}
+.mgui-sidebar__toggle:hover { background: var(--btn-bg-hover); }
+.mgui-sidebar.is-expanded .mgui-sidebar__toggle { transform: scaleX(-1); } /* inverse le chevron */
+
+.mgui-toolbar {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 8px;
+}
+
+/* Bouton de la barre */
+.mgui-tool {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--btn-size) 1fr;
+  align-items: center;
+
+  width: 100%;
+  min-height: var(--btn-size);
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid var(--btn-stroke);
+  background: var(--btn-bg);
+  color: var(--fg);
+  font: 600 12px/1 system-ui, sans-serif;
+  cursor: pointer;
+  overflow: hidden; /* masque le label quand replié */
+}
+.mgui-tool:hover { background: var(--btn-bg-hover); }
+.mgui-tool:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Icône SVG */
+.mgui-tool__icon {
+  width: var(--btn-size);
+  height: var(--btn-size);
+  object-fit: contain;
+  display: block;
+  justify-self: center; /* centre l’icône dans la 1re colonne */
+  pointer-events: none;
+}
+
+/* Libellé long, généré automatiquement depuis data-label */
+.mgui-tool::after {
+  content: attr(data-label);
+  margin-left: 8px;
+  white-space: nowrap;
+  color: var(--fg-muted);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+/* Quand la barre est dépliée, on révèle le libellé */
+.mgui-sidebar.is-expanded .mgui-tool::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ====== Panneau qui s’aligne sur la barre ====== */
+.mgui-panel {
+  position: fixed;
+
+  left: calc(env(safe-area-inset-left, 0px) + var(--sidebar-w) + var(--hud-gap));
+  top: calc(env(safe-area-inset-top, 0px) + var(--hud-top) + var(--hud-gap));
+  bottom: var(--hud-gap);
+
+  width: var(--panel-width);
+  background-color: color-mix(in srgb, var(--panel-bg) 90%, transparent);
+  border: var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  overflow: hidden;
+  z-index: 1001;
+
+  /* fermé par défaut via translation pour éviter display:none */
+  transform: translateX(-110%);
+  transition: transform .22s ease, left .22s ease; /* suit l’ouverture de la barre */
+}
+
+.mgui-panel.is-open {
+  transform: translateX(0);
+}
+
+.mgui-panel:not(.is-open) {
+  transform: translateX(calc(-1 * (var(--panel-width, 28rem) + var(--hud-gap, 8px))));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mgui-panel__header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px;
+  background: color-mix(in srgb, #000 13%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, #fff 12%, transparent);
+}
+:root[data-theme="light"] .mgui-panel__header {
+  background: color-mix(in srgb, #000 5%, transparent);
+  border-bottom-color: color-mix(in srgb, #000 8%, transparent);
+}
+.mgui-panel__header h2 { margin: 0; font: 600 14px/1.2 system-ui, sans-serif; color: var(--fg); }
+.mgui-panel__close {
+  border: 0; width: 28px; height: 28px; border-radius: 6px;
+  background: transparent; color: var(--fg); cursor: pointer;
+}
+.mgui-panel__close:hover { background: var(--hover-overlay); }
+.mgui-panel__close:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.mgui-panel__body {
+  padding: 12px;
+  overflow: auto;
+  height: calc(100% - 48px);
+  min-height: 0;
+  color: var(--fg);
+}

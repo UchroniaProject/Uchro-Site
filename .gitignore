@@ -1,0 +1,11 @@
+#Ignore the venv folder
+Django/
+
+#Ignore databases
+*.db
+*.sqlite3
+
+#Ignore some configuration files
+__pycache__/
+*.env
+UchroProject.code-workspace
